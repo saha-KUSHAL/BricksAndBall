@@ -1,13 +1,8 @@
 package Game;
 
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
 
 import Utills.LoadAndSave;
 
@@ -16,15 +11,17 @@ public class Ball {
 	private BufferedImage img, ballSprites[];
 	private int imgIndex, spriteCount, animationSpeed;
 	private GamePanel gamePanel;
+	private Hitbox hitbox;
 
 	public Ball(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
-		diameter = gamePanel.tileSize;
+		diameter = GamePanel.TILE_SIZE;
 		x = ((gamePanel.width - diameter) - diameter) / 2;
 		y = ((gamePanel.hight - diameter) - diameter) / 2;
 		animationSpeed = 20;
-		dx = 3;
+		dx = 2;
 		dy = 1;
+		hitbox = new Hitbox(x, y, diameter, diameter, Hitbox.CIRCLE);
 		importImage();
 		loadSprites();
 	}
@@ -34,10 +31,10 @@ public class Ball {
 	}
 
 	private void loadSprites() {
-		spriteCount = img.getWidth() / gamePanel.tileSize;
+		spriteCount = img.getWidth() / GamePanel.TILE_SIZE;
 		ballSprites = new BufferedImage[spriteCount];
 		for (int i = 0; i < spriteCount; i++) {
-			ballSprites[i] = img.getSubimage(i * gamePanel.tileSize, 0, gamePanel.tileSize, gamePanel.tileSize);
+			ballSprites[i] = img.getSubimage(i * GamePanel.TILE_SIZE, 0, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE);
 		}
 	}
 
@@ -54,20 +51,22 @@ public class Ball {
 	private void setPosition() {
 		x += dx;
 		y += dy;
-		if(x < 0 || x > (gamePanel.width - diameter)) 
+		if (x < 0 || x > (gamePanel.width - diameter))
 			dx = -dx;
-		if( y < 0 || y > (gamePanel.hight - diameter))
+		if (y < 0 || y > (gamePanel.hight - diameter))
 			dy = -dy;
 
 	}
 
-	void update() {
+	protected void update() {
 		setPosition();
+		hitbox.updateHitbox(x, y);
 		ballAnimate();
 	}
 
-	void draw(Graphics2D g) {
-		g.drawImage(ballSprites[imgIndex], x, y, gamePanel.tileSize, gamePanel.tileSize, null);
+	protected void draw(Graphics2D g) {
+		g.drawImage(ballSprites[imgIndex], x, y, GamePanel.TILE_SIZE, GamePanel.TILE_SIZE, null);
+		hitbox.displayHitbox(g);
 		Toolkit.getDefaultToolkit().sync(); // Flush the Linux graphics buffer
 	}
 }

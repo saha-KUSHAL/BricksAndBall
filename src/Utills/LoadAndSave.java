@@ -37,12 +37,17 @@ public class LoadAndSave {
 	public static int[][] getLevelData() {
 		int[][] levelData = new int[GamePanel.row][GamePanel.column];
 		BufferedImage img = LoadAndSave.getAtlas(LEVEL_1);
-		for (int i = 0; i < img.getHeight(); i++) {
-			for (int j = 0; j < img.getWidth(); j++) {
+		
+		// No of tiles is equal to no of pixels in the level map
+		int noOfXTiles = img.getWidth();
+		int noOfYTiles = img.getHeight();
+		
+		for (int i = 0; i < noOfYTiles ; i++) {
+			for (int j = 0; j < noOfXTiles; j++) {
 				Color color = new Color(img.getRGB(j, i));
 				int redValue = color.getRed();
-				if (redValue > 1)
-					redValue = 1; // It will change according to the tiles atlas
+				if (redValue > 3)
+					redValue = 2; // It will change according to the tiles atlas
 				levelData[i][j] = redValue;
 			}
 		}

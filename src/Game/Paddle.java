@@ -10,6 +10,7 @@ public class Paddle {
 	public int x, y, width, hight, speed = 4;
 	private MouseInput mouseInput;
 	private BufferedImage paddle0;
+	private Hitbox hitbox;
 
 	public Paddle(GamePanel gamePanel, MouseInput mouseInput) {
 		this.mouseInput = mouseInput;
@@ -18,6 +19,7 @@ public class Paddle {
 		hight = paddle0.getHeight();
 		this.x = (gamePanel.width - width) / 2;
 		this.y = gamePanel.hight - 100;
+		hitbox = new Hitbox(x,y,width,hight,Hitbox.RECTANGLE);
 	}
 
 	private void setImage() {
@@ -29,10 +31,12 @@ public class Paddle {
 		if (mouseInput.isMouseMoved) {
 			x = mouseInput.getXCord(width);
 		}
+		hitbox.updateHitbox(x, y);
 	}
 
 	public void draw(Graphics2D g) {
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.drawImage(paddle0, x, y, null);
+		hitbox.displayHitbox(g);
 	}
 }
