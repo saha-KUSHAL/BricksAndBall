@@ -6,8 +6,9 @@ public class Game implements Runnable {
 	private final int FPS_SET = 120;
 	private final int UPS_SET = 200;
 	private Thread gameThread;
-
+	public static boolean debug;
 	public Game() {
+		debug = true;
 		gamePanel = new GamePanel();
 		gameWindow = new GameWindow(gamePanel);
 		gamePanel.requestFocus();
